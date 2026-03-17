@@ -1,0 +1,1 @@
+{"uuid":"af58bd9c-98be-4ac7-932c-a9480b42ebe9","name":"Automation Practice Suite","children":["c9cf99ec-7dce-4c3c-b29b-a67c56c6bf9b"],"befores":[{"name":"setUpReport","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1773655315103,"stop":1773655315557}],"afters":[],"start":1773655315048,"stop":1773655341580}
