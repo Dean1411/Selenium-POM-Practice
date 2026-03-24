@@ -9,11 +9,9 @@ pipeline {
     stages {
 
         stage('Checkout') {
-            steps {
-                git branch: 'main',
-                credentialsId: 'github_Token',
-                checkout: scm
-            }
+		    steps {
+		        checkout scm
+		    }
         }
 
         stage('Build') {
@@ -24,13 +22,13 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn clean test'
             }
         }
 
         stage('Archive Reports') {
             steps {
-                junit '**/target/surefire-reports/*.xml'
+                archiveArtifacts artifacts: '**/extentReport/*.html', fingerprint: true
             }
         }
     }
