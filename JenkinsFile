@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git branch: 'main',
                 credentialsId: 'github_Token',
-                url: 'https://github.com/Dean1411/Selenium-POM-Practice.git'
+                checkout: scm
             }
         }
 
