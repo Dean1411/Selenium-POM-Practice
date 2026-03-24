@@ -180,6 +180,7 @@ public class baseTest extends Base {
 					wait.until(ExpectedConditions.presenceOfElementLocated(locator));
 			
 			JavascriptExecutor js = (JavascriptExecutor) driver;
+			
 			js.executeScript("arguments[0].click();", element);
 		}catch (ElementClickInterceptedException e) {
 			
