@@ -1,4 +1,5 @@
 # Java / Selenium ignores
+Extensions/*.crx
 target/
 test-output/
 reports/
