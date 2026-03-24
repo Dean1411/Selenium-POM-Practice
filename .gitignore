@@ -1,0 +1,11 @@
+# Java / Selenium ignores
+target/
+test-output/
+reports/
+screenshots/
+*.log
+*.tmp
+*.class
+.idea/
+.vscode/
+.DS_Store
