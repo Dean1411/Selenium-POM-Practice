@@ -26,20 +26,21 @@ public class home extends baseTest {
 	private By city = By.id("city");
 	private By zipCode = By.id("zipcode");
 	private By mobileNo = By.id("mobile_number");
-	private By createBtn = By.xpath("//*[@id=\"form\"]/div/div/div/div/form/button");
+	private By createBtn = By.cssSelector("button[data-qa='create-account']");
 	private By successMsg = By.xpath("//h2[@class='title text-center']");
-	private By continueBtn = By.xpath("//a[normalize-space()='Continue']");
+	//private By continueBtn = By.xpath("//a[normalize-space()='Continue']");.btn.btn-primary
+	private By continueBtn = By.cssSelector(".btn.btn-primary");
 	private By deleteNotification = By.xpath("//b[normalize-space()='Account Deleted!']");
 	
 	
-	public void clickMenuItem() {
+	public void clickMenuItem() throws InterruptedException {
 		selectMenuItem(menuList,"Signup / Login");
 	}
 	
-	public void signUp() {
+	public void signUp() throws InterruptedException {
 		
-		type(name, "Test2");
-		type(email,"automationEngineer@gmail.com");	
+		type(name, "Test3");
+		type(email,"automationEngineer101@gmail.com");	
 		log.info("Page Title" + getPageTitle());
 		click(signUpBtn);
 		
@@ -52,10 +53,10 @@ public class home extends baseTest {
 		
 	}
 	
-	public void fillForm() {
+	public void fillForm() throws InterruptedException {
 		
 		click(title);
-		type(pssword, "@utomation");
+		type(pssword, "@utomationE");
 		selectByText(days,"16");
 		selectByText(months, "June");
 		selectByText(yrs,"1971");
@@ -70,7 +71,9 @@ public class home extends baseTest {
 		type(zipCode,"5421");
 		type(mobileNo,"0712456843");
 		scrollAndClick(createBtn);
-		click(createBtn);	
+//		isDisplayed(createBtn);
+//		isClickable(createBtn);
+//		submitForm(createBtn);	
 		getText(successMsg);
 		click(continueBtn);	
 		
@@ -78,10 +81,10 @@ public class home extends baseTest {
 	
 	public void verifyUser() {
 		
-		isLoggedIn(menuList,"Test2");
+		isLoggedIn(menuList,"Test3");
 	}
 	
-	public void deleteAc() {
+	public void deleteAc() throws InterruptedException {
 		
        selectMenuItem(menuList,"Delete Account");
        getText(deleteNotification);

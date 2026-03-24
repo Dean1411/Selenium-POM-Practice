@@ -21,7 +21,7 @@ public class registerUser extends baseTest {
 	
 	@Test
 	@Description("Sign up a user and delete it again")
-	public void registerUsr() {
+	public void registerUsr() throws InterruptedException {
 		extentManager.getTest().info("Click sign-up/login");
 		homePage.clickMenuItem();
 		extentManager.getTest().info("Type name of user to sign up");

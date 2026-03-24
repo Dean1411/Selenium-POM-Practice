@@ -3,6 +3,7 @@ package baseTest;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -10,9 +11,12 @@ import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
@@ -45,13 +49,14 @@ public class baseTest extends Base {
 	}
 	
 	public void selectMenuItem(By element,String txt) {
-		removeGoogleAds();
+		
 		List<WebElement> menu = findAll(element);
 		
 		try {
 			
 			for(WebElement item: menu) {
 				if(item.getText().trim().contains(txt)) {
+					removeGoogleAds();
 					click(item);
 					System.out.println(item.getText() + " clicked");
 					break;
@@ -99,9 +104,27 @@ public class baseTest extends Base {
 		
 	}
 	
+	public void submitForm(By locator) {
+		
+		try {
+			
+			wait.until(ExpectedConditions.
+					elementToBeClickable(locator)).submit();
+		}catch(ElementClickInterceptedException ex) {
+			
+	        System.out.println("Click intercepted — removing ads...");
+
+	        removeGoogleAds();
+	        
+	        wait.until(ExpectedConditions
+	                .elementToBeClickable(locator)).submit();
+		}
+	}
+	
 	public void click(WebElement item) {
 		
 		try {
+			removeGoogleAds();
 			wait.until(ExpectedConditions.
 					elementToBeClickable(item)).click();
 		}catch(ElementClickInterceptedException ex) {
@@ -109,23 +132,22 @@ public class baseTest extends Base {
 	        System.out.println("Click intercepted — removing ads...");
 
 	        removeGoogleAds();
-
+	        
 	        wait.until(ExpectedConditions
 	                .elementToBeClickable(item)).click();
 		}
-
 	}
 	
-//	public void click(By element) {
-//		wait.until(ExpectedConditions.
-//				elementToBeClickable(element)).click();
-//	}
 	
-	public void click(By element) {
+	public void click(By locator) {
 
 	    try {
-	        wait.until(ExpectedConditions
-	                .elementToBeClickable(element)).click();
+	    	
+	    	removeGoogleAds();
+	    	WebElement element = wait.until(ExpectedConditions
+	                .elementToBeClickable(locator));
+	    	
+	    	element.click();
 
 	    } catch (ElementClickInterceptedException e) {
 
@@ -133,9 +155,57 @@ public class baseTest extends Base {
 
 	        removeGoogleAds();
 
-	        wait.until(ExpectedConditions
-	                .elementToBeClickable(element)).click();
+	        WebElement element = wait.until(ExpectedConditions
+	                .elementToBeClickable(locator));
+
+	        element.submit();
+	        
+	    }catch (StaleElementReferenceException ex) {
+	    	
+	        System.out.println("Element went stale — retrying click");
+
+	        WebElement element = wait.until(
+	                ExpectedConditions.elementToBeClickable(locator));
+	        
+	        element.submit();
 	    }
+	}
+	
+	public void jsClick(By locator) {
+		
+		try {
+			removeGoogleAds();
+			
+			WebElement element = 
+					wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+			
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].click();", element);
+		}catch (ElementClickInterceptedException e) {
+			
+			removeGoogleAds();
+			
+			System.out.println("Element click intercepted. Retry clicking.");
+			
+			WebElement element = 
+					wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+			
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].click();", element);
+			
+		}catch(StaleElementReferenceException ex) {
+			
+			removeGoogleAds();
+			
+			System.out.println("Element went stale — retrying click");
+			
+			WebElement element = 
+					wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+			
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].click();", element);
+		}
+
 	}
 	
 	public void type(By element, String txt) {
@@ -192,6 +262,18 @@ public class baseTest extends Base {
 		return true;
 	}
 	
+	public boolean isClickable(By locator) {
+		
+		try {
+			wait.until(ExpectedConditions.elementToBeClickable(locator));
+			return true;
+		}catch (NoSuchElementException ex) {
+			log.warn("Element not enabled or clickable: ", ex);
+			return false;
+		}
+		
+	}
+	
 	public void acceptAlert() {
 		
 		driver.switchTo().alert().accept();
@@ -211,7 +293,7 @@ public class baseTest extends Base {
 	    );
 	}
 	
-	public void scrollAndClick(By locator) {
+	public void scrollAndClick(By locator) throws InterruptedException {
 
 	    WebElement element = wait.until(
 	        ExpectedConditions.presenceOfElementLocated(locator)
@@ -221,8 +303,18 @@ public class baseTest extends Base {
 	        "arguments[0].scrollIntoView({block: 'center'})",
 	        element
 	    );
+	    
+	    clickFluent(locator);
+	    
+//	    Thread.sleep(500);
+//	    wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+	}
+	
 
-	    wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+	public void clickFluent(By locator) {
+
+	    WebElement element = fluentWait(locator);
+	    element.click();
 	}
 	
 	@AfterSuite

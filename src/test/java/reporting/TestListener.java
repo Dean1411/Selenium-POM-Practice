@@ -7,6 +7,7 @@ import org.testng.ITestResult;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 
+import Utilities.CaptureScreenshots;
 import base.Base;
 import baseTest.baseTest;
 
@@ -14,6 +15,7 @@ import baseTest.baseTest;
 public class TestListener extends baseTest implements ITestListener{
 	
 	public static ExtentTest test;
+	public static Utilities.CaptureScreenshots utils;
 
 	@Override
 	public void onTestStart(ITestResult result) {
@@ -32,8 +34,10 @@ public class TestListener extends baseTest implements ITestListener{
 	public void onTestFailure(ITestResult result) {
 		
 	    WebDriver driver = Base.getDriver();
+	    
+	    String screenshot = CaptureScreenshots.captureScreenshot(driver, result.getName());
 
-	    String screenshot = Base.captureScreenshot(driver, result.getName());
+	    //String screenshot = utils.CaptureScreenshots(driver, result.getName());
 
 	    extentManager.getTest().fail(result.getThrowable())
 	                 .addScreenCaptureFromPath(screenshot);
