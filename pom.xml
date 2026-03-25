@@ -24,7 +24,7 @@
 
 				<configuration>
 					<suiteXmlFiles>
-						<suiteXmlFile>Selenium-POM-Practice\TestRunner\testng.xml</suiteXmlFile>
+						<suiteXmlFile>TestRunner\testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
 
