@@ -30,7 +30,7 @@ public class RegisterUserTest extends baseTest {
 		homePage.fillForm();
 		extentManager.getTest().info("Verify if user is created.");
 		homePage.verifyUser();
-		extentManager.getTest().info("Delete created user.");
+		extentManager.getTest().info("Delete created user");
 		homePage.deleteAc();
 	}
 }
