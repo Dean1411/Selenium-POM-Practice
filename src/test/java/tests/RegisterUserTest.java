@@ -10,7 +10,7 @@ import reporting.extentManager;
 
 
 
-public class RegisterUser extends baseTest {
+public class RegisterUserTest extends baseTest {
 	
 	private home homePage;
 	
