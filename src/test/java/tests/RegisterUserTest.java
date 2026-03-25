@@ -26,7 +26,7 @@ public class RegisterUserTest extends baseTest {
 		homePage.clickMenuItem();
 		extentManager.getTest().info("Type name of user to sign up");
 		homePage.signUp();
-		extentManager.getTest().info("Fill form");
+		extentManager.getTest().info("Fill form.");
 		homePage.fillForm();
 		extentManager.getTest().info("Verify if user is created");
 		homePage.verifyUser();
