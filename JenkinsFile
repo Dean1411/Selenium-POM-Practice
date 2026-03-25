@@ -22,7 +22,7 @@ pipeline {
 
         stage('Archive Extent Report') {
             steps {
-                archiveArtifacts artifacts: '**/*.html', fingerprint: true
+                archiveArtifacts artifacts: '**/extentReport*.html', fingerprint: true
             }
         }
     }
