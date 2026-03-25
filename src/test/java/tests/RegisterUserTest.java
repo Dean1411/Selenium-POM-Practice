@@ -24,7 +24,7 @@ public class RegisterUserTest extends baseTest {
 	public void registerUserTest() throws InterruptedException {
 		extentManager.getTest().info("Click sign-up/login.");
 		homePage.clickMenuItem();
-		extentManager.getTest().info("Type name of user to sign up.");
+		extentManager.getTest().info("Type name of user to sign up");
 		homePage.signUp();
 		extentManager.getTest().info("Fill form.");
 		homePage.fillForm();
