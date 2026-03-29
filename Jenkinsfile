@@ -24,6 +24,7 @@ pipeline {
 
         stage('Archive Extent Report') {
             steps {
+            	echo 'Archiving artifacts'
                 archiveArtifacts artifacts: '**/extentReport*.html', fingerprint: true
             }
         }
