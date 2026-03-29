@@ -1,0 +1,53 @@
+{
+	"signup_to_login_with_user": [
+	  {
+	    "name": "",
+	    "email": ""
+	  }
+	],
+	
+  "loginUser": [
+    {
+      "email": "validuser@automation.com",
+      "password": "P@$$w0rd!1"
+    }
+  ],
+
+  "registerUser": [
+    {
+      "title": "Mr",
+      "name": "Dean Aschendorf",
+      "email": "aschendorfdean@gmail.com",
+      "password": "P@$$w0rd!1",
+
+      "dateOfBirth": {
+        "day": "10",
+        "month": "May",
+        "year": "1990"
+      },
+
+      "newsletter": true,
+      "specialOffers": true,
+
+      "addressInformation": {
+        "firstName": "Dean",
+        "lastName": "Aschendorf",
+        "company": "Test Company",
+        "address": "123 Test Street",
+        "address2": "Unit 4",
+        "country": "India",
+        "state": "Gauteng",
+        "city": "Johannesburg",
+        "zipcode": "2000",
+        "mobileNumber": "0821234567"
+      }
+    }
+  ],
+
+  "signupName": [
+    {
+      "name": "",
+      "email": ""
+    }
+  ]
+}
