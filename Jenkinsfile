@@ -7,15 +7,17 @@ pipeline {
     }
 
     stages {
-
+    
         stage('Checkout') {
             steps {
+            	echo 'Checking out SCM'
                 checkout scm
             }
         }
 
         stage('Build & Test') {
-            steps {
+            steps  {
+				echo 'Building and running tests'
                 bat 'mvn clean test'
             }
         }
