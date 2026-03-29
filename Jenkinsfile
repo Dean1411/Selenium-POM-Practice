@@ -17,7 +17,7 @@ pipeline {
 
         stage('Build & Test') {
             steps  {
-				echo 'Building and running tests'
+				echo 'Building and running tests.'
                 bat 'mvn clean test'
             }
         }
