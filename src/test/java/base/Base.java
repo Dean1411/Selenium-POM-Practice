@@ -66,7 +66,7 @@ public class Base {
 
 	    Wait<WebDriver> fluentWait = new FluentWait<>(getDriver())
 	            .withTimeout(Duration.ofSeconds(10))
-	            .pollingEvery(Duration.ofSeconds(2))
+	            .pollingEvery(Duration.ofSeconds(3))
 	            .ignoring(NoSuchElementException.class)
 	            .ignoring(StaleElementReferenceException.class);
 
@@ -103,7 +103,7 @@ public class Base {
 			getDriver().manage().window().maximize();
 			getDriver().get(prop.getProperty("url"));
 			getDriver().manage().deleteAllCookies();
-			wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
+			wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
 			act.set(new Actions(getDriver()));
 			break;
 		case "chrome-headless":

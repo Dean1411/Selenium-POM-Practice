@@ -94,16 +94,19 @@ public class home extends baseTest {
 		
 	}
 	
-	public void verifyUser(String txt) {
+	public boolean verifyUser(String txt) {
 		
-		isLoggedIn(menuList,txt);
+		return  isLoggedIn(menuList,txt);
+		
 	}
 	
-	public void deleteAc() throws InterruptedException {
+	public String deleteAc() throws InterruptedException {
 		
        selectMenuItem(menuList,"Delete Account");
-       getText(deleteNotification);
+       String message = getText(deleteNotification);
        click(continueBtn);	
+       
+       return message;
        
 	}
 	
