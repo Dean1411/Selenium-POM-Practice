@@ -1,5 +1,6 @@
 package tests;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -32,8 +33,11 @@ public class RegisterUserTest extends baseTest {
 		extentManager.getTest().info("Fill form.");
 		homePage.fillForm();
 		extentManager.getTest().info("Verify if user is created");
-		homePage.verifyUser(user);
+		boolean userLoggedIn = homePage.verifyUser(user);
 		extentManager.getTest().info("Delete created user");
-		homePage.deleteAc();
+		String deleteMessage = homePage.deleteAc();
+		
+	    extentManager.getTest().info("Verify account deletion message");
+	    Assert.assertEquals(deleteMessage, "ACCOUNT DELETED!");
 	}
 }

@@ -70,12 +70,12 @@ public class baseTest extends Base {
 		try {
 			for(WebElement item: menu) {
 				if(item.getText().trim().contains(txt)) {
-					System.out.println("User logged in: " + item.getText());
+					log.info("User logged in: " + item.getText());
 					return true;
 				}
 			}
 		}catch (Exception ex) {
-			System.out.println("Is loggedin Exception: " + ex.getMessage());
+			log.warn("Is loggedin Exception: " + ex.getMessage());
 		}
 		
 		return false;
@@ -296,7 +296,7 @@ public class baseTest extends Base {
 	        ExpectedConditions.presenceOfElementLocated(locator)
 	    );
 
-	    ((JavascriptExecutor) driver).executeScript(
+	    ((JavascriptExecutor) getDriver()).executeScript(
 	        "arguments[0].scrollIntoView({block: 'center'})",
 	        element
 	    );
