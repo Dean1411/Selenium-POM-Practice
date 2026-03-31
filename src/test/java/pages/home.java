@@ -94,9 +94,9 @@ public class home extends baseTest {
 		
 	}
 	
-	public void verifyUser() {
+	public void verifyUser(String txt) {
 		
-		isLoggedIn(menuList,"Test3");
+		isLoggedIn(menuList,txt);
 	}
 	
 	public void deleteAc() throws InterruptedException {

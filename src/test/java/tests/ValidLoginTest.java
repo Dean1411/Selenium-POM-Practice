@@ -3,6 +3,7 @@ package tests;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -32,11 +33,17 @@ public class ValidLoginTest extends baseTest {
 	    JSONObject loginUser = userLogin.getJSONObject(0);
 	    String email = loginUser.getString("email");
 	    String password = loginUser.getString("password");
+	    String expectedUser = "Valid";
 		
 		extentManager.getTest().info("Click sign-up/login.");
 		homePage.clickMenuItem();
 		extentManager.getTest().info("enter username and password and click login.");
 		homePage.login(email,password);
+		extentManager.getTest().info("Get signed in user.");
+		homePage.verifyUser(expectedUser);
+		
+		extentManager.getTest().info("Assert if correct user is logged in.");
+		Assert.assertEquals(expectedUser, "Dean");
 
 	}
 

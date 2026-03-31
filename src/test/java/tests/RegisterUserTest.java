@@ -22,6 +22,9 @@ public class RegisterUserTest extends baseTest {
 	@Test
 	@Description("Sign up a user and delete it again.")
 	public void registerUserTest() throws InterruptedException {
+		
+		String user = "Valid";
+		
 		extentManager.getTest().info("Click sign-up/login.");
 		homePage.clickMenuItem();
 		extentManager.getTest().info("Type name of user to sign up");
@@ -29,7 +32,7 @@ public class RegisterUserTest extends baseTest {
 		extentManager.getTest().info("Fill form.");
 		homePage.fillForm();
 		extentManager.getTest().info("Verify if user is created");
-		homePage.verifyUser();
+		homePage.verifyUser(user);
 		extentManager.getTest().info("Delete created user");
 		homePage.deleteAc();
 	}
