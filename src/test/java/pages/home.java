@@ -8,9 +8,18 @@ public class home extends baseTest {
 	
 	private By menuList = By.xpath("//ul[@class='nav navbar-nav']/li/a");//ul[@class='nav navbar-nav']
 	private By title = By.id("id_gender1");
+	
+	//New user signup fields
 	private By name = By.xpath("//input[@placeholder='Name']");
 	private By email = By.xpath("//input[@data-qa='signup-email']");
 	private By signUpBtn = By.xpath("//button[normalize-space()='Signup']");
+	
+	//login fields
+	private By emailAddress = By.xpath("//input[@placeholder='Email Address']");
+	private By password = By.xpath("//input[@data-qa='login-password']");
+	private By loginBtn = By.xpath("//button[normalize-space()='Login']");
+	
+	//Sign-up page fields
 	private By pgTitle = By.xpath("//*[@id=\"form\"]/div/div/div/div/h2");
 	private By pssword = By.id("password");
 	private By days = By.id("days");
@@ -53,6 +62,12 @@ public class home extends baseTest {
 		
 	}
 	
+	public void login(String userEmail, String pssWrd) {
+		type(emailAddress,userEmail);
+		type(password, pssWrd);
+		click(loginBtn);
+	}
+	
 	public void fillForm() throws InterruptedException {
 		
 		click(title);
@@ -79,9 +94,9 @@ public class home extends baseTest {
 		
 	}
 	
-	public void verifyUser() {
+	public void verifyUser(String txt) {
 		
-		isLoggedIn(menuList,"Test3");
+		isLoggedIn(menuList,txt);
 	}
 	
 	public void deleteAc() throws InterruptedException {

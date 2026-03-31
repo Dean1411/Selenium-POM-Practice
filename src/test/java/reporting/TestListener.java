@@ -38,7 +38,6 @@ public class TestListener extends baseTest implements ITestListener{
 	    
 	    String screenshot = CaptureScreenshots.captureScreenshot(driver, result.getName());
 
-	    //String screenshot = utils.CaptureScreenshots(driver, result.getName());
 
 	    extentManager.getTest().fail(result.getThrowable())
 	                 .addScreenCaptureFromPath(screenshot);

@@ -3,7 +3,6 @@ package baseTest;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -11,12 +10,9 @@ import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
@@ -325,8 +321,10 @@ public class baseTest extends Base {
 	    try {
 	        File file = new File(System.getProperty("user.dir")
 	                + "/src/test/resources/reports/extentReport.html");
-
-	        Desktop.getDesktop().browse(file.toURI());
+	        
+	        if(Desktop.isDesktopSupported()) {
+	        	Desktop.getDesktop().browse(file.toURI());
+	        }
 	    } 
 	    catch (IOException e) {
 	        e.printStackTrace();

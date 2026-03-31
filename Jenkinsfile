@@ -24,7 +24,7 @@ pipeline {
 
         stage('Archive Extent Report') {
             steps {
-            	echo 'Archiving artifacts.'
+            	echo 'Archiving artifacts'
                 archiveArtifacts artifacts: '**/extentReport*.html', fingerprint: true
             }
         }
@@ -35,7 +35,7 @@ pipeline {
             junit '**/target/surefire-reports/*.xml'
             
             publishHTML([
-            	reportDir: 'reports',
+            	reportDir: 'src/test/resources/reports',
             	reportFiles: 'extentReport.html',
             	reportName: 'Extent Test Report',
             	keepAll: true,
