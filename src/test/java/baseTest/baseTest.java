@@ -34,12 +34,12 @@ public class baseTest extends Base {
 	
 	public WebElement find(By element) {
 		
-		return driver.findElement(element);
+		return getDriver().findElement(element);
 	}
 	
 	public List<WebElement> findAll(By element){
 		
-		return wait.until(ExpectedConditions.refreshed(
+		return getWait().until(ExpectedConditions.refreshed(
 		        ExpectedConditions.visibilityOfAllElementsLocatedBy(element)
 				));
 	}
@@ -94,7 +94,7 @@ public class baseTest extends Base {
 	
 	public String getPageTitle() {
 		
-		String title = driver.getTitle();
+		String title = getDriver().getTitle();
 		System.out.println("Title: " + title);
 		return title;
 		
@@ -104,7 +104,7 @@ public class baseTest extends Base {
 		
 		try {
 			
-			wait.until(ExpectedConditions.
+			getWait().until(ExpectedConditions.
 					elementToBeClickable(locator)).submit();
 		}catch(ElementClickInterceptedException ex) {
 			
@@ -112,7 +112,7 @@ public class baseTest extends Base {
 
 	        removeGoogleAds();
 	        
-	        wait.until(ExpectedConditions
+	        getWait().until(ExpectedConditions
 	                .elementToBeClickable(locator)).submit();
 		}
 	}
@@ -121,7 +121,7 @@ public class baseTest extends Base {
 		
 		try {
 			removeGoogleAds();
-			wait.until(ExpectedConditions.
+			getWait().until(ExpectedConditions.
 					elementToBeClickable(item)).click();
 		}catch(ElementClickInterceptedException ex) {
 			
@@ -129,7 +129,7 @@ public class baseTest extends Base {
 
 	        removeGoogleAds();
 	        
-	        wait.until(ExpectedConditions
+	        getWait().until(ExpectedConditions
 	                .elementToBeClickable(item)).click();
 		}
 	}
@@ -140,7 +140,7 @@ public class baseTest extends Base {
 	    try {
 	    	
 	    	removeGoogleAds();
-	    	WebElement element = wait.until(ExpectedConditions
+	    	WebElement element = getWait().until(ExpectedConditions
 	                .elementToBeClickable(locator));
 	    	
 	    	element.click();
@@ -151,7 +151,7 @@ public class baseTest extends Base {
 
 	        removeGoogleAds();
 
-	        WebElement element = wait.until(ExpectedConditions
+	        WebElement element = getWait().until(ExpectedConditions
 	                .elementToBeClickable(locator));
 
 	        element.submit();
@@ -160,7 +160,7 @@ public class baseTest extends Base {
 	    	
 	        System.out.println("Element went stale — retrying click");
 
-	        WebElement element = wait.until(
+	        WebElement element = getWait().until(
 	                ExpectedConditions.elementToBeClickable(locator));
 	        
 	        element.submit();
@@ -173,9 +173,9 @@ public class baseTest extends Base {
 			removeGoogleAds();
 			
 			WebElement element = 
-					wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+					getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
 			
-			JavascriptExecutor js = (JavascriptExecutor) driver;
+			JavascriptExecutor js = (JavascriptExecutor) getDriver();
 			
 			js.executeScript("arguments[0].click();", element);
 		}catch (ElementClickInterceptedException e) {
@@ -185,7 +185,7 @@ public class baseTest extends Base {
 			System.out.println("Element click intercepted. Retry clicking.");
 			
 			WebElement element = 
-					wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+					getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
 			
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", element);
@@ -197,9 +197,9 @@ public class baseTest extends Base {
 			System.out.println("Element went stale — retrying click");
 			
 			WebElement element = 
-					wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+					getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
 			
-			JavascriptExecutor js = (JavascriptExecutor) driver;
+			JavascriptExecutor js = (JavascriptExecutor) getDriver();
 			js.executeScript("arguments[0].click();", element);
 		}
 
@@ -208,7 +208,7 @@ public class baseTest extends Base {
 	public void type(By element, String txt) {
 		
 		try {
-			WebElement el = wait.until(ExpectedConditions.
+			WebElement el = getWait().until(ExpectedConditions.
 					visibilityOfElementLocated(element));
 			
 			el.clear();
@@ -231,7 +231,7 @@ public class baseTest extends Base {
 	public void selectByText(By locator, String txt) {		
 		
 		try {
-			WebElement options = wait.until(
+			WebElement options = getWait().until(
 					ExpectedConditions.visibilityOfElementLocated(locator));
 			
 			Select select = new Select(options);
@@ -243,7 +243,7 @@ public class baseTest extends Base {
 	
 	public String getText(By locator) {
 		
-		String txt = wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText();
+		String txt = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator)).getText();
 		System.out.println("Text: " + txt);
 		return txt;
 	}
@@ -251,7 +251,7 @@ public class baseTest extends Base {
 	public boolean isDisplayed(By locator) {
 		
 		try {
-			wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+			getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
 		}catch(Exception ex) {
 			log.warn("Exception: ", ex);
 			return false;
@@ -262,7 +262,7 @@ public class baseTest extends Base {
 	public boolean isClickable(By locator) {
 		
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(locator));
+			getWait().until(ExpectedConditions.elementToBeClickable(locator));
 			return true;
 		}catch (NoSuchElementException ex) {
 			log.warn("Element not enabled or clickable: ", ex);
@@ -273,16 +273,16 @@ public class baseTest extends Base {
 	
 	public void acceptAlert() {
 		
-		driver.switchTo().alert().accept();
+		getDriver().switchTo().alert().accept();
 	}
 	
 	public void declineAlert() {
-		driver.switchTo().alert().dismiss();
+		getDriver().switchTo().alert().dismiss();
 	}
 	
 	public void removeGoogleAds() {
 
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
+	    JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
 	    js.executeScript(
 	        "document.querySelectorAll('a[href*=\"googleadservices\"],' +" +
@@ -292,7 +292,7 @@ public class baseTest extends Base {
 	
 	public void scrollAndClick(By locator) throws InterruptedException {
 
-	    WebElement element = wait.until(
+	    WebElement element = getWait().until(
 	        ExpectedConditions.presenceOfElementLocated(locator)
 	    );
 
@@ -302,9 +302,6 @@ public class baseTest extends Base {
 	    );
 	    
 	    clickFluent(locator);
-	    
-//	    Thread.sleep(500);
-//	    wait.until(ExpectedConditions.elementToBeClickable(element)).click();
 	}
 	
 

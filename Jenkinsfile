@@ -17,8 +17,23 @@ pipeline {
 
         stage('Build & Test') {
             steps  {
-				echo 'Building and running tests.'
-                bat 'mvn clean test'
+				
+				script{
+					if(env.CHANGE_ID){
+						echo "Pull Request detected -> Running single suite."
+						bat "mvn clean test -DsuiteXmlFile=TestRunner/testng.xml"
+					}
+					else if (env.BRANCH_NAME == 'main'){
+	                    echo "Main branch detected → Running parallel cross browser suite"
+
+                        bat "mvn clean test -DsuiteXmlFile=TestRunner/testng-parallel.xml"
+					}
+					else{
+                        echo "Feature branch → Running single suite"
+
+                        bat "mvn clean test -DsuiteXmlFile=TestRunner/testng.xml"
+					}
+				}
             }
         }
 

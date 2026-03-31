@@ -3,7 +3,9 @@ package reporting;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
-public class report {
+import base.Base;
+
+public class report extends Base {
 	
 	public static ExtentReports extent;
 	
@@ -19,7 +21,7 @@ public class report {
 	    
 	    extent.setSystemInfo("Tester", "Dean Aschendorf");
 	    extent.setSystemInfo("Environment", "Development");
-	    extent.setSystemInfo("Browser", "Chrome");
+	    extent.setSystemInfo("Browser", Base.getBrowser());
 	    
 		return extent;
 	}
