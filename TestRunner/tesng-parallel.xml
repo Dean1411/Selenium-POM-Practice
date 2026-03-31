@@ -8,21 +8,18 @@
 	<test name="Chrome">
 	<parameter name="browser" value="chrome-headless"></parameter>
 		<classes>
-<!--			<class name="tests.RegisterUserTest" />-->
 			<class name="tests.ValidLoginTest" />
 		</classes>
 	</test> 
 		<test name="Firefox">
 		<parameter name="browser" value="firefox-headless"></parameter>
 		<classes>
-<!--			<class name="tests.RegisterUserTest" />-->
 			<class name="tests.ValidLoginTest" />
 		</classes>
 	</test> 
 		<test name="Edge">
 		<parameter name="browser" value="edge-headless"></parameter>
 		<classes>
-<!--			<class name="tests.RegisterUserTest" />-->
 			<class name="tests.ValidLoginTest" />
 		</classes>
 	</test> 

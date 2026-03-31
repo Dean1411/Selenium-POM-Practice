@@ -6,12 +6,9 @@
 	<listeners>
 		<listener class-name="reporting.TestListener"></listener>
 	</listeners>
-<!--	<packages>-->
-<!--		<package name="tests" />-->
-<!--	</packages>-->
 	<test thread-count="5" name="Test">
 		<classes>
-<!--			<class name="tests.RegisterUserTest" />-->
+			<class name="tests.RegisterUserTest" />
 			<class name="tests.ValidLoginTest" />
 		</classes>
 	</test> <!--
