@@ -24,7 +24,7 @@
 
 				<configuration>
 					<suiteXmlFiles>
-						<suiteXmlFile>TestRunner\testng.xml</suiteXmlFile>
+						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
 
