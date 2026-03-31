@@ -43,7 +43,7 @@ public class ValidLoginTest extends baseTest {
 		homePage.verifyUser(expectedUser);
 		
 		extentManager.getTest().info("Assert if correct user is logged in.");
-		Assert.assertEquals(expectedUser, "Dean");
+		Assert.assertEquals(expectedUser, "Valid");
 
 	}
 
