@@ -24,6 +24,7 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.log4testng.Logger;
@@ -79,6 +80,7 @@ public class Base {
 	public void setup(@Optional("chrome") String browserName) throws IOException {
 		
 		browser.set(browserName);
+		
 		
 		if(prop.isEmpty()) {				
 				fr = new FileReader("src/test/resources/config/config.properties");	
@@ -196,6 +198,9 @@ public class Base {
 		if(getDriver() != null) {
 			getDriver().quit();
 			driver.remove();
+			browser.remove();
+			wait.remove();
+			act.remove();
 		}
 	}
 }
