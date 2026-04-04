@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import Utilities.JsonUtils;
+import Utilities.RetryAnalyzer;
 import baseTest.baseTest;
 import io.qameta.allure.Description;
 import pages.home;
@@ -26,7 +27,7 @@ public class ValidLoginTest extends baseTest {
 		userLogin = JsonUtils.getLoginUsers();
 	}
 	
-	@Test
+	@Test(retryAnalyzer = RetryAnalyzer.class)
 	@Description("Login User with correct email and password")
 	public void loginWithRegisteredUserTest() throws InterruptedException {
 			    
