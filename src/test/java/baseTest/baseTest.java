@@ -14,6 +14,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -23,6 +24,7 @@ import base.Base;
 public class baseTest extends Base {
 	
 	public static ExtentReports extent;
+	
 	
 	@BeforeSuite
 	public void setUpReport() {
@@ -187,7 +189,7 @@ public class baseTest extends Base {
 			WebElement element = 
 					getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
 			
-			JavascriptExecutor js = (JavascriptExecutor) driver;
+			JavascriptExecutor js = (JavascriptExecutor) getDriver();
 			js.executeScript("arguments[0].click();", element);
 			
 		}catch(StaleElementReferenceException ex) {

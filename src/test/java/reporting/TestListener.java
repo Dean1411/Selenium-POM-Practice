@@ -12,7 +12,7 @@ import base.Base;
 import baseTest.baseTest;
 
 
-public class TestListener extends baseTest implements ITestListener{
+public class TestListener  implements ITestListener{
 	
 	public static ExtentTest test;
 	public static Utilities.CaptureScreenshots utils;
@@ -24,6 +24,7 @@ public class TestListener extends baseTest implements ITestListener{
 		test = baseTest.extent.createTest(result.getMethod().getMethodName());
 		
 		extentManager.setTest(test);
+		test.assignCategory(Base.getBrowser());
 	}
 	
 	@Override
