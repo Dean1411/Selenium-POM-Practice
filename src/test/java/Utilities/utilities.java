@@ -1,5 +1,6 @@
 package Utilities;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -55,10 +56,29 @@ public class utilities {
 	
 	public static void main(String[]args) {
 		
-		addMetersToList();
-		loopThroughMeters();
-		System.out.println("Successful Vend: "+ successfulVend);
-		System.out.println("Unsuccessful Vend: "+ unsuccessfulVend);
+//		addMetersToList();
+//		loopThroughMeters();
+//		System.out.println("Successful Vend: "+ successfulVend);
+//		System.out.println("Unsuccessful Vend: "+ unsuccessfulVend);
+		
+		Scanner sc = new Scanner(System.in);
+		
+		String input = sc.nextLine();
+		
+		System.out.println( reverseString(input));
+	}
+	
+	public static String reverseString(String input) {
+		
+		String r = "";
+		
+		for(int i = 0; i<input.length();i++) {
+			
+			r = input.charAt(i) + r;
+		}
+		
+		return r;
+		
 	}
 
 
