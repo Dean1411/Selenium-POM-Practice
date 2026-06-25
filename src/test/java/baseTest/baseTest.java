@@ -72,6 +72,7 @@ public class baseTest extends Base {
 		try {
 			for(WebElement item: menu) {
 				if(item.getText().trim().contains(txt)) {
+					
 					log.info("User logged in: " + item.getText());
 					return true;
 				}
