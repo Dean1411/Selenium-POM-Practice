@@ -118,8 +118,7 @@ public class Base {
 				case "chrome":
 					cap.setBrowserName("chrome");
 					break;
-				case "edge":
-					
+				case "edge":					
 					cap.setBrowserName("edge");
 				    break;
 				case "firefox":

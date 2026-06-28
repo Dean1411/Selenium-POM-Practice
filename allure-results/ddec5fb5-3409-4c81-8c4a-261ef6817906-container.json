@@ -1,0 +1,1 @@
+{"uuid":"ddec5fb5-3409-4c81-8c4a-261ef6817906","name":"Smoke/CI","children":["71687a5f-93d6-4953-bcb3-0983c5015ff6"],"befores":[{"name":"setUpReport","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1782643042019,"stop":1782643043146}],"afters":[],"start":1782643041967,"stop":1782643043540}
