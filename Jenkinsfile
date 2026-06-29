@@ -7,56 +7,88 @@ pipeline {
     }
 
     stages {
-    
+
         stage('Checkout') {
             steps {
-            	echo 'Checking out SCM..'
+                echo 'Checking out SCM...'
                 checkout scm
             }
         }
 
+        stage('Start Selenium Grid') {
+            steps {
+                echo 'Starting Selenium Grid...'
+
+                bat 'docker compose up -d'
+
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitUntil {
+                        script {
+                            def status = bat(
+                                script: 'curl -s http://localhost:4444/status',
+                                returnStdout: true
+                            ).trim()
+
+                            return status.contains('"ready":true')
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Build & Test') {
-            steps  {
-				
-				script{
-					if(env.CHANGE_ID){
-						echo "Pull Request detected -> Running single suite."
-						bat "mvn clean test -DsuiteXmlFile=TestRunner/testng.xml"
-					}
-					else if (env.BRANCH_NAME == 'main'){
-	                    echo "Main branch detected → Running parallel cross browser suite"
+            steps {
 
-                        bat "mvn clean test -DsuiteXmlFile=TestRunner/testng-parallel.xml"
-					}
-					else{
-                        echo "Feature branch → Running single suite"
+                script {
 
-                        bat "mvn clean test -DsuiteXmlFile=TestRunner/testng.xml"
-					}
-				}
+                    if (env.CHANGE_ID) {
+
+                        echo "Pull Request detected -> Running single suite"
+
+                        bat "mvn clean test -DsuiteXmlFile=TestRunner/grid-docker.xml"
+
+                    } else if (env.BRANCH_NAME == 'main') {
+
+                        echo "Main branch detected -> Running parallel suite"
+
+                        bat "mvn clean test -DsuiteXmlFile=TestRunner/grid-docker.xml"
+
+                    } else {
+
+                        echo "Feature branch detected -> Running suite"
+
+                        bat "mvn clean test -DsuiteXmlFile=TestRunner/grid-docker.xml"
+
+                    }
+                }
             }
         }
 
         stage('Archive Extent Report') {
             steps {
-            	echo 'Archiving artifacts.'
                 archiveArtifacts artifacts: '**/extentReport*.html', fingerprint: true
             }
         }
     }
 
     post {
+
         always {
+
             junit '**/target/surefire-reports/*.xml'
-            
+
             publishHTML([
-            	reportDir: 'src/test/resources/reports',
-            	reportFiles: 'extentReport.html',
-            	reportName: 'Extent Test Report',
-            	keepAll: true,
-            	alwaysLinkToLastBuild: true,
-            	allowMissing: true
+                reportDir: 'src/test/resources/reports',
+                reportFiles: 'extentReport.html',
+                reportName: 'Extent Test Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: true
             ])
+
+            echo 'Stopping Selenium Grid...'
+
+            bat 'docker compose down'
         }
     }
 }
