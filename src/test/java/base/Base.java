@@ -126,6 +126,9 @@ public class Base {
 						chromeOp.addArguments("--no-sandbox");
 						chromeOp.addArguments("--disable-dev-shm-usage");
 						chromeOp.addArguments("--headless=new");
+				        chromeOp.addArguments("--disable-gpu"); 
+				        chromeOp.addArguments("--disable-extensions");
+				        chromeOp.addArguments("--blink-settings=imagesEnabled=false");
 						
 						cap.merge(chromeOp);
 						cap.setBrowserName("chrome");
@@ -136,6 +139,8 @@ public class Base {
 						edgeOp.addArguments("--no-sandbox");
 						edgeOp.addArguments("--disable-dev-shm-usage");
 						edgeOp.addArguments("--headless=new");
+				        edgeOp.addArguments("--disable-gpu");
+				        edgeOp.addArguments("--disable-extensions");
 						
 						cap.merge(edgeOp);
 						cap.setBrowserName("edge");
