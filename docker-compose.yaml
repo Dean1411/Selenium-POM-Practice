@@ -1,9 +1,8 @@
-version: "3.8"
+version:
 
 services:
   selenium-hub:
     image: selenium/hub:latest
-    container_name: selenium-hub
     ports:
       - "4442:4442"
       - "4443:4443"
@@ -11,7 +10,6 @@ services:
 
   node-chrome:
     image: selenium/node-chrome:latest
-    container_name: chrome-node
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -22,7 +20,6 @@ services:
 
   node-firefox:
     image: selenium/node-firefox:latest
-    container_name: firefox-node
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -33,7 +30,6 @@ services:
 
   node-edge:
     image: selenium/node-edge:latest
-    container_name: edge-node
     shm_size: 2gb
     depends_on:
       - selenium-hub
