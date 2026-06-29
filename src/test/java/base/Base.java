@@ -120,6 +120,13 @@ public class Base {
 				//Browser
 				switch(browserName.toLowerCase()) {
 					case "chrome":
+						
+						ChromeOptions chromeOp = new ChromeOptions();
+						
+						chromeOp.addArguments("--no-sandbox");
+						chromeOp.addArguments("--disable-dev-shm-usage");
+						chromeOp.addArguments("--headless=new");
+						
 						cap.setBrowserName("chrome");
 						break;
 					case "edge":					
