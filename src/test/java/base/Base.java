@@ -127,6 +127,7 @@ public class Base {
 						chromeOp.addArguments("--disable-dev-shm-usage");
 						chromeOp.addArguments("--headless=new");
 						
+						cap.merge(chromeOp);
 						cap.setBrowserName("chrome");
 						break;
 					case "edge":		
@@ -136,6 +137,7 @@ public class Base {
 						edgeOp.addArguments("--disable-dev-shm-usage");
 						edgeOp.addArguments("--headless=new");
 						
+						cap.merge(edgeOp);
 						cap.setBrowserName("edge");
 					    break;
 					case "firefox":
