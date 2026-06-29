@@ -1,15 +1,13 @@
-version:
-
 services:
   selenium-hub:
-    image: selenium/hub:latest
+    image: selenium/hub:4.45.0
     ports:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
 
   node-chrome:
-    image: selenium/node-chrome:latest
+    image: selenium/node-chrome:4.45.0
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -19,7 +17,7 @@ services:
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 
   node-firefox:
-    image: selenium/node-firefox:latest
+    image: selenium/node-firefox:4.45.0
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -29,7 +27,7 @@ services:
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 
   node-edge:
-    image: selenium/node-edge:latest
+    image: selenium/node-edge:4.45.0
     shm_size: 2gb
     depends_on:
       - selenium-hub
