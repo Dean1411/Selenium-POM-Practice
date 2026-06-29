@@ -46,8 +46,8 @@ public class Base {
 	protected static ThreadLocal<String> browser = new ThreadLocal<>();
 	protected static ThreadLocal<WebDriverWait> wait = new ThreadLocal<>();
 	protected static ThreadLocal<Actions> act = new ThreadLocal<>();
+	public static final Properties prop = new Properties();
 	public static FileReader fr;
-	public static Properties prop = new Properties();
 	public static final Logger log = LogManager.getLogger(Base.class);
 	public static ExtentReports report;
 	
@@ -87,11 +87,15 @@ public class Base {
 		
 		browser.set(browserName);
 		
-		
-		if(prop.isEmpty()) {				
-				fr = new FileReader("src/test/resources/config/config.properties");	
-				prop.load(fr);
-				log.info("file successfully loaded");
+		// FIXED: Synchronized block ensures only ONE thread loads the properties file at a time
+		// and the FileReader 'fr' is isolated locally within this method scope.
+		synchronized (prop) {
+			if(prop.isEmpty()) {				
+				try (FileReader fr = new FileReader("src/test/resources/config/config.properties")) {
+					prop.load(fr);
+					log.info("Properties file successfully loaded");
+				}
+			}
 		}
 		
 		String hubUrl = prop.getProperty("huburl");
@@ -106,11 +110,10 @@ public class Base {
 				cap.setPlatform(Platform.LINUX);
 			}else if (osName.equalsIgnoreCase("mac")) {
 				cap.setPlatform(Platform.MAC);
-			}else if (osName.equalsIgnoreCase("linux")) {
-				cap.setPlatform(Platform.LINUX);
+			}else if (osName.equalsIgnoreCase("windows")) {
+				cap.setPlatform(Platform.WINDOWS);
 			}else {
 				log.info("OS not matching");
-				return;
 			}
 			
 			//Browser
@@ -125,8 +128,7 @@ public class Base {
 					cap.setBrowserName("firefox");	
 				    break;
 				default:
-					log.warn("Incorrect driver selected.");	
-					break;
+					throw new IllegalArgumentException("Incorrect remote driver selected: " + browserName);
 				}
 			
 				driver.set(new RemoteWebDriver(new URL(hubUrl), cap));		
