@@ -22,13 +22,13 @@
 			<class name="tests.ValidLoginTest" />
 		</classes>
 	</test>
-<!--	<test thread-count="5" name="Test-Edge">-->
-<!--		<parameter name="browser" value="edge"></parameter>-->
-<!--		<parameter name="OS" value="linux"></parameter>-->
-<!--		<classes>-->
-<!--						<class name="tests.RegisterUserTest" />-->
-<!--			<class name="tests.ValidLoginTest" />-->
-<!--		</classes>-->
-<!--	</test>-->
+	<test thread-count="5" name="Test-Edge">
+		<parameter name="browser" value="edge"></parameter>
+		<parameter name="OS" value="linux"></parameter>
+		<classes>
+						<class name="tests.RegisterUserTest" />
+			<class name="tests.ValidLoginTest" />
+		</classes>
+	</test>
 </suite> <!--
 Suite -->
