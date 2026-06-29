@@ -129,7 +129,13 @@ public class Base {
 						
 						cap.setBrowserName("chrome");
 						break;
-					case "edge":					
+					case "edge":		
+						
+						EdgeOptions edgeOp = new EdgeOptions();
+						edgeOp.addArguments("--no-sandbox");
+						edgeOp.addArguments("--disable-dev-shm-usage");
+						edgeOp.addArguments("--headless=new");
+						
 						cap.setBrowserName("edge");
 					    break;
 					case "firefox":

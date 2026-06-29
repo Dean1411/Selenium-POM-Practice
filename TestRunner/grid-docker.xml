@@ -14,8 +14,16 @@
 			<class name="tests.ValidLoginTest" />
 		</classes>
 	</test>
-		<test thread-count="5" name="Test-Chrome">
+	<test thread-count="5" name="Test-Chrome">
 		<parameter name="browser" value="chrome"></parameter>
+		<parameter name="OS" value="linux"></parameter>
+		<classes>
+			<!--			<class name="tests.RegisterUserTest" />-->
+			<class name="tests.ValidLoginTest" />
+		</classes>
+	</test>
+	<test thread-count="5" name="Test-Edge">
+		<parameter name="browser" value="edge"></parameter>
 		<parameter name="OS" value="linux"></parameter>
 		<classes>
 			<!--			<class name="tests.RegisterUserTest" />-->
