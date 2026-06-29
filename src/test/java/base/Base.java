@@ -132,7 +132,7 @@ public class Base {
 				driver.set(new RemoteWebDriver(new URL(hubUrl), cap));		
 				
 			    getDriver().manage().deleteAllCookies();
-			    getDriver().manage().window().maximize(); // optional depending on grid/node support
+			    getDriver().manage().window().maximize();
 			    getDriver().get(prop.getProperty("url"));
 
 			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
