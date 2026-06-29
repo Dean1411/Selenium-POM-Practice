@@ -85,174 +85,176 @@ public class Base {
 	@Parameters({"browser","OS"})
 	public void setup(@Optional("chrome") String browserName, String osName) throws IOException {
 		
-		browser.set(browserName);
-		
-		// FIXED: Synchronized block ensures only ONE thread loads the properties file at a time
-		// and the FileReader 'fr' is isolated locally within this method scope.
-		synchronized (prop) {
-			if(prop.isEmpty()) {				
-				try (FileReader fr = new FileReader("src/test/resources/config/config.properties")) {
-					prop.load(fr);
-					log.info("Properties file successfully loaded");
+		try {
+			browser.set(browserName);
+			
+			// FIXED: Synchronized block ensures only ONE thread loads the properties file at a time
+			// and the FileReader 'fr' is isolated locally within this method scope.
+			synchronized (prop) {
+				if(prop.isEmpty()) {				
+					try (FileReader fr = new FileReader("src/test/resources/config/config.properties")) {
+						prop.load(fr);
+						log.info("Properties file successfully loaded");
+					}
 				}
 			}
-		}
-		
-		String hubUrl = prop.getProperty("huburl");
-		
-		// Remote or Grid Test Env options		
-		if(prop.getProperty("test_env").equalsIgnoreCase("remote")) {
 			
-			DesiredCapabilities cap = new DesiredCapabilities();
+			String hubUrl = prop.getProperty("huburl");
 			
-			//OS
-			if(osName.equalsIgnoreCase("linux")) {
-				cap.setPlatform(Platform.LINUX);
-			}else if (osName.equalsIgnoreCase("mac")) {
-				cap.setPlatform(Platform.MAC);
-			}else if (osName.equalsIgnoreCase("windows")) {
-				cap.setPlatform(Platform.WINDOWS);
-			}else {
-				log.info("OS not matching");
+			// Remote or Grid Test Env options		
+			if(prop.getProperty("test_env").equalsIgnoreCase("remote")) {
+				
+				DesiredCapabilities cap = new DesiredCapabilities();
+				
+				//OS
+				if(osName.equalsIgnoreCase("linux")) {
+					cap.setPlatform(Platform.LINUX);
+				}else if (osName.equalsIgnoreCase("mac")) {
+					cap.setPlatform(Platform.MAC);
+				}else if (osName.equalsIgnoreCase("windows")) {
+					cap.setPlatform(Platform.WINDOWS);
+				}else {
+					log.info("OS not matching");
+				}
+				
+				//Browser
+				switch(browserName.toLowerCase()) {
+					case "chrome":
+						cap.setBrowserName("chrome");
+						break;
+					case "edge":					
+						cap.setBrowserName("edge");
+					    break;
+					case "firefox":
+						cap.setBrowserName("firefox");	
+					    break;
+					default:
+						throw new IllegalArgumentException("Incorrect remote driver selected: " + browserName);
+					}
+				
+					driver.set(new RemoteWebDriver(new URL(hubUrl), cap));		
+					
+				    getDriver().manage().deleteAllCookies();
+				    getDriver().manage().window().maximize();
+				    getDriver().get(prop.getProperty("url"));
+
+				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
+				    act.set(new Actions(getDriver()));
 			}
 			
-			//Browser
-			switch(browserName.toLowerCase()) {
+			//Local test environment
+			if(prop.getProperty("test_env").equalsIgnoreCase("local")) {
+				
+				switch(browserName) {
 				case "chrome":
-					cap.setBrowserName("chrome");
+					ChromeOptions opt = new ChromeOptions();
+					opt.addArguments("--incognito");
+					opt.addArguments("--disable-notifications");
+					opt.addArguments("--start-maximized");
+
+					Map<String, Object> prefs = new HashMap<>();
+					prefs.put("profile.default_content_setting_values.notifications", 2);
+					opt.setExperimentalOption("prefs", prefs);
+					
+					WebDriverManager.chromedriver().setup();
+					driver.set(new ChromeDriver(opt));
+					getDriver().manage().window().maximize();
+					getDriver().get(prop.getProperty("url"));
+					getDriver().manage().deleteAllCookies();
+					wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
+					act.set(new Actions(getDriver()));
 					break;
-				case "edge":					
-					cap.setBrowserName("edge");
+				case "chrome-headless":
+				    ChromeOptions chromeHeadless = new ChromeOptions();
+				    chromeHeadless.addArguments("--headless=new");
+				    chromeHeadless.addArguments("--disable-gpu");
+				    chromeHeadless.addArguments("--window-size=1920,1080");
+				    chromeHeadless.addArguments("--disable-notifications");
+
+				    WebDriverManager.chromedriver().setup();
+				    driver.set(new ChromeDriver(chromeHeadless));
+				    
+				    getDriver().manage().deleteAllCookies();
+				    getDriver().get(prop.getProperty("url"));
+
+				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
+				    act.set(new Actions(getDriver()));
+					break;
+				case "edge":
+
+				    EdgeOptions edgeOptions = new EdgeOptions();
+				    edgeOptions.addArguments("--start-maximized");
+
+				    WebDriverManager.edgedriver().setup();
+				    driver.set(new EdgeDriver(edgeOptions));
+				    
+				    getDriver().manage().deleteAllCookies();
+				    getDriver().get(prop.getProperty("url"));
+
+				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
+				    act.set(new Actions(getDriver()));
+
+				    break;
+				case "edge-headless":
+
+				    EdgeOptions edgeHeadless = new EdgeOptions();
+				    edgeHeadless.addArguments("--headless=new");
+				    edgeHeadless.addArguments("--window-size=1920,1080");
+
+				    WebDriverManager.edgedriver().setup();
+				    driver.set(new EdgeDriver(edgeHeadless));
+				    
+				    getDriver().manage().deleteAllCookies();
+				    getDriver().get(prop.getProperty("url"));
+
+				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
+				    act.set(new Actions(getDriver()));
+
 				    break;
 				case "firefox":
-					cap.setBrowserName("firefox");	
+
+				    FirefoxOptions firefoxOptions = new FirefoxOptions();
+				    firefoxOptions.addArguments("--start-maximized");
+
+				    WebDriverManager.firefoxdriver().setup();
+				    driver.set(new FirefoxDriver(firefoxOptions));
+				    
+				    getDriver().manage().deleteAllCookies();
+				    getDriver().get(prop.getProperty("url"));
+
+				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
+				    act.set(new Actions(getDriver()));
+
+				    break;
+				case "firefox-headless":
+
+				    FirefoxOptions firefoxHeadless = new FirefoxOptions();
+				    firefoxHeadless.addArguments("--headless");
+
+				    WebDriverManager.firefoxdriver().setup();
+				    driver.set(new FirefoxDriver(firefoxHeadless));
+				    
+				    getDriver().manage().deleteAllCookies();
+				    getDriver().get(prop.getProperty("url"));
+
+				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
+				    act.set(new Actions(getDriver()));
+
 				    break;
 				default:
-					throw new IllegalArgumentException("Incorrect remote driver selected: " + browserName);
+					log.warn("Incorrect driver selected.");	
+					break;
 				}
-			
-				driver.set(new RemoteWebDriver(new URL(hubUrl), cap));		
-				
-			    getDriver().manage().deleteAllCookies();
-			    getDriver().manage().window().maximize();
-			    getDriver().get(prop.getProperty("url"));
-
-			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
-			    act.set(new Actions(getDriver()));
-		}
-		
-		//Local test environment
-		if(prop.getProperty("test_env").equalsIgnoreCase("local")) {
-			
-			switch(browserName) {
-			case "chrome":
-				ChromeOptions opt = new ChromeOptions();
-				opt.addArguments("--incognito");
-				opt.addArguments("--disable-notifications");
-				opt.addArguments("--start-maximized");
-
-				Map<String, Object> prefs = new HashMap<>();
-				prefs.put("profile.default_content_setting_values.notifications", 2);
-				opt.setExperimentalOption("prefs", prefs);
-				
-				WebDriverManager.chromedriver().setup();
-				driver.set(new ChromeDriver(opt));
-				getDriver().manage().window().maximize();
-				getDriver().get(prop.getProperty("url"));
-				getDriver().manage().deleteAllCookies();
-				wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
-				act.set(new Actions(getDriver()));
-				break;
-			case "chrome-headless":
-			    ChromeOptions chromeHeadless = new ChromeOptions();
-			    chromeHeadless.addArguments("--headless=new");
-			    chromeHeadless.addArguments("--disable-gpu");
-			    chromeHeadless.addArguments("--window-size=1920,1080");
-			    chromeHeadless.addArguments("--disable-notifications");
-
-			    WebDriverManager.chromedriver().setup();
-			    driver.set(new ChromeDriver(chromeHeadless));
-			    
-			    getDriver().manage().deleteAllCookies();
-			    getDriver().get(prop.getProperty("url"));
-
-			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
-			    act.set(new Actions(getDriver()));
-				break;
-			case "edge":
-
-			    EdgeOptions edgeOptions = new EdgeOptions();
-			    edgeOptions.addArguments("--start-maximized");
-
-			    WebDriverManager.edgedriver().setup();
-			    driver.set(new EdgeDriver(edgeOptions));
-			    
-			    getDriver().manage().deleteAllCookies();
-			    getDriver().get(prop.getProperty("url"));
-
-			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
-			    act.set(new Actions(getDriver()));
-
-			    break;
-			case "edge-headless":
-
-			    EdgeOptions edgeHeadless = new EdgeOptions();
-			    edgeHeadless.addArguments("--headless=new");
-			    edgeHeadless.addArguments("--window-size=1920,1080");
-
-			    WebDriverManager.edgedriver().setup();
-			    driver.set(new EdgeDriver(edgeHeadless));
-			    
-			    getDriver().manage().deleteAllCookies();
-			    getDriver().get(prop.getProperty("url"));
-
-			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
-			    act.set(new Actions(getDriver()));
-
-			    break;
-			case "firefox":
-
-			    FirefoxOptions firefoxOptions = new FirefoxOptions();
-			    firefoxOptions.addArguments("--start-maximized");
-
-			    WebDriverManager.firefoxdriver().setup();
-			    driver.set(new FirefoxDriver(firefoxOptions));
-			    
-			    getDriver().manage().deleteAllCookies();
-			    getDriver().get(prop.getProperty("url"));
-
-			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
-			    act.set(new Actions(getDriver()));
-
-			    break;
-			case "firefox-headless":
-
-			    FirefoxOptions firefoxHeadless = new FirefoxOptions();
-			    firefoxHeadless.addArguments("--headless");
-
-			    WebDriverManager.firefoxdriver().setup();
-			    driver.set(new FirefoxDriver(firefoxHeadless));
-			    
-			    getDriver().manage().deleteAllCookies();
-			    getDriver().get(prop.getProperty("url"));
-
-			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(15)));
-			    act.set(new Actions(getDriver()));
-
-			    break;
-			default:
-				log.warn("Incorrect driver selected.");	
-				break;
 			}
+		}catch(Throwable t) {
+			
+	        System.err.println("!!! SETUP FAILED FOR BROWSER: " + browserName + " !!!");
+	        t.printStackTrace();
+	        throw new RuntimeException(t);
 		}
 			
 	}
-			
-
-			
-
-	
-		
+					
 	@AfterMethod
 	public void tearDown() {
 		
