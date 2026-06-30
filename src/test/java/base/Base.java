@@ -100,66 +100,62 @@ public class Base {
 			}
 			
 			String hubUrl = prop.getProperty("huburl");
-			
-			// Remote or Grid Test Env options		
-			if(prop.getProperty("test_env").equalsIgnoreCase("remote")) {
-				
-				DesiredCapabilities cap = new DesiredCapabilities();
-				
-				//OS
-				if(osName.equalsIgnoreCase("linux")) {
-					cap.setPlatform(Platform.LINUX);
-				}else if (osName.equalsIgnoreCase("mac")) {
-					cap.setPlatform(Platform.MAC);
-				}else if (osName.equalsIgnoreCase("windows")) {
-					cap.setPlatform(Platform.WINDOWS);
-				}else {
-					log.info("OS not matching");
-				}
-				
-				//Browser
-				switch(browserName.toLowerCase()) {
-					case "chrome":
-						
-						ChromeOptions chromeOp = new ChromeOptions();
-						
-						chromeOp.addArguments("--no-sandbox");
-						chromeOp.addArguments("--disable-dev-shm-usage");
-						chromeOp.addArguments("--headless=new");
-				        chromeOp.addArguments("--disable-gpu"); 
-				        chromeOp.addArguments("--disable-extensions");
-				        chromeOp.addArguments("--blink-settings=imagesEnabled=false");
-						
-						cap.merge(chromeOp);
-						cap.setBrowserName("chrome");
-						break;
-					case "edge":		
-						
-						EdgeOptions edgeOp = new EdgeOptions();
-						edgeOp.addArguments("--no-sandbox");
-						edgeOp.addArguments("--disable-dev-shm-usage");
-						edgeOp.addArguments("--headless=new");
-				        edgeOp.addArguments("--disable-gpu");
-				        edgeOp.addArguments("--disable-extensions");
-						
-						cap.merge(edgeOp);
-						cap.setBrowserName("edge");
-					    break;
-					case "firefox":
-						cap.setBrowserName("firefox");	
-					    break;
-					default:
-						throw new IllegalArgumentException("Incorrect remote driver selected: " + browserName);
-					}
-				
-					driver.set(new RemoteWebDriver(new URL(hubUrl), cap));		
-					
-				    getDriver().manage().deleteAllCookies();
-				    getDriver().manage().window().maximize();
-				    getDriver().get(prop.getProperty("url"));
 
-				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
-				    act.set(new Actions(getDriver()));
+			// Remote or Grid Test Env options
+			if (prop.getProperty("test_env").equalsIgnoreCase("remote")) {
+
+			    RemoteWebDriver remoteDriver;
+
+			    switch (browserName.toLowerCase()) {
+
+			        case "chrome":
+
+			            ChromeOptions chromeOptions = new ChromeOptions();
+			            chromeOptions.setPlatformName(osName.toLowerCase());
+
+			            chromeOptions.addArguments("--headless=new");
+			            chromeOptions.addArguments("--no-sandbox");
+			            chromeOptions.addArguments("--disable-dev-shm-usage");
+			            chromeOptions.addArguments("--window-size=1920,1080");
+
+			            remoteDriver = new RemoteWebDriver(new URL(hubUrl), chromeOptions);
+			            break;
+
+			        case "firefox":
+
+			            FirefoxOptions firefoxOptions = new FirefoxOptions();
+			            firefoxOptions.setPlatformName(osName.toLowerCase());
+
+			            firefoxOptions.addArguments("--headless");
+
+			            remoteDriver = new RemoteWebDriver(new URL(hubUrl), firefoxOptions);
+			            break;
+
+			        case "edge":
+
+			            EdgeOptions edgeOptions = new EdgeOptions();
+			            edgeOptions.setPlatformName(osName.toLowerCase());
+
+			            edgeOptions.addArguments("--headless=new");
+			            edgeOptions.addArguments("--no-sandbox");
+			            edgeOptions.addArguments("--disable-dev-shm-usage");
+			            edgeOptions.addArguments("--window-size=1920,1080");
+
+			            remoteDriver = new RemoteWebDriver(new URL(hubUrl), edgeOptions);
+			            break;
+
+			        default:
+			            throw new IllegalArgumentException("Unsupported browser: " + browserName);
+			    }
+
+			    driver.set(remoteDriver);
+
+			    getDriver().manage().deleteAllCookies();
+			    // Don't maximize in headless mode
+			    getDriver().get(prop.getProperty("url"));
+
+			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
+			    act.set(new Actions(getDriver()));
 			}
 			
 			//Local test environment
