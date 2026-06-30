@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -101,65 +102,72 @@ public class Base {
 			
 			String hubUrl = prop.getProperty("huburl");
 			
-			// Remote or Grid Test Env options		
-			if(prop.getProperty("test_env").equalsIgnoreCase("remote")) {
-				
-				DesiredCapabilities cap = new DesiredCapabilities();
-				
-				//OS
-				if(osName.equalsIgnoreCase("linux")) {
-					cap.setPlatform(Platform.LINUX);
-				}else if (osName.equalsIgnoreCase("mac")) {
-					cap.setPlatform(Platform.MAC);
-				}else if (osName.equalsIgnoreCase("windows")) {
-					cap.setPlatform(Platform.WINDOWS);
-				}else {
-					log.info("OS not matching");
-				}
-				
-				//Browser
-				switch(browserName.toLowerCase()) {
-					case "chrome":
-						
-						ChromeOptions chromeOp = new ChromeOptions();
-						
-						chromeOp.addArguments("--no-sandbox");
-						chromeOp.addArguments("--disable-dev-shm-usage");
-						chromeOp.addArguments("--headless=new");
-				        chromeOp.addArguments("--disable-gpu"); 
-				        chromeOp.addArguments("--disable-extensions");
-				        chromeOp.addArguments("--blink-settings=imagesEnabled=false");
-						
-						cap.merge(chromeOp);
-						cap.setBrowserName("chrome");
-						break;
-					case "edge":		
-						
-						EdgeOptions edgeOp = new EdgeOptions();
-						edgeOp.addArguments("--no-sandbox");
-						edgeOp.addArguments("--disable-dev-shm-usage");
-						edgeOp.addArguments("--headless=new");
-				        edgeOp.addArguments("--disable-gpu");
-				        edgeOp.addArguments("--disable-extensions");
-						
-						cap.merge(edgeOp);
-						cap.setBrowserName("edge");
-					    break;
-					case "firefox":
-						cap.setBrowserName("firefox");	
-					    break;
-					default:
-						throw new IllegalArgumentException("Incorrect remote driver selected: " + browserName);
-					}
-				
-					driver.set(new RemoteWebDriver(new URL(hubUrl), cap));		
-					
-				    getDriver().manage().deleteAllCookies();
-				    getDriver().manage().window().maximize();
-				    getDriver().get(prop.getProperty("url"));
+			// Remote or Grid Test Env options
+			if (prop.getProperty("test_env").equalsIgnoreCase("remote")) {
 
-				    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
-				    act.set(new Actions(getDriver()));
+			    MutableCapabilities options;
+
+			    switch (browserName.toLowerCase()) {
+
+			        case "chrome":
+
+			            ChromeOptions chromeOp = new ChromeOptions();
+
+			            chromeOp.addArguments("--no-sandbox");
+			            chromeOp.addArguments("--disable-dev-shm-usage");
+			            chromeOp.addArguments("--headless=new");
+			            chromeOp.addArguments("--disable-gpu");
+			            chromeOp.addArguments("--disable-extensions");
+			            chromeOp.addArguments("--blink-settings=imagesEnabled=false");
+
+			            options = chromeOp;
+			            break;
+
+			        case "edge":
+
+			            EdgeOptions edgeOp = new EdgeOptions();
+
+			            edgeOp.addArguments("--no-sandbox");
+			            edgeOp.addArguments("--disable-dev-shm-usage");
+			            edgeOp.addArguments("--headless=new");
+			            edgeOp.addArguments("--disable-gpu");
+			            edgeOp.addArguments("--disable-extensions");
+
+			            options = edgeOp;
+			            break;
+
+			        case "firefox":
+
+			            FirefoxOptions firefoxOp = new FirefoxOptions();
+
+			            firefoxOp.addArguments("--headless");
+
+			            options = firefoxOp;
+			            break;
+
+			        default:
+			            throw new IllegalArgumentException("Incorrect remote driver selected: " + browserName);
+			    }
+
+			    // Set platform
+			    if (osName.equalsIgnoreCase("linux")) {
+			        options.setCapability("platformName", "linux");
+			    } else if (osName.equalsIgnoreCase("windows")) {
+			        options.setCapability("platformName", "windows");
+			    } else if (osName.equalsIgnoreCase("mac")) {
+			        options.setCapability("platformName", "mac");
+			    } else {
+			        log.info("OS not matching");
+			    }
+
+			    driver.set(new RemoteWebDriver(new URL(hubUrl), options));
+
+			    getDriver().manage().deleteAllCookies();
+			    getDriver().manage().window().maximize();
+			    getDriver().get(prop.getProperty("url"));
+
+			    wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(20)));
+			    act.set(new Actions(getDriver()));
 			}
 			
 			//Local test environment
